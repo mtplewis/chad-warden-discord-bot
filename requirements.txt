@@ -1,0 +1,4 @@
+discord
+numpy
+pandas
+imgur-uploader

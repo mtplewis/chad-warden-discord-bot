@@ -15,22 +15,6 @@ class MyClient(discord.Client):
 
     client = discord.Client()
 
-    chat_wardens = [
-        'its ya boi chaaad warden!!!',
-        'im talkin bout that PS QUINTOUPLE!',
-        'Xbox SeX?? man that controller look like a DIL DO',
-        'Xbox aint got no gameS!!!',
-        'https://youtu.be/vyufDxxWIsM',
-        'i aint talkin about that wii... shitt... people be talkin about its all... \'new\' n shit',
-        'i aint tryna play my games with no DIL DO',
-        'Warioware: shove it up yo own ass game NOT IN STOCK',
-        'xbox palyers cant do shit except SUCK DICK',
-        'sony is true shit',
-        'FUCK gears of war, more like TEARS of war. lil bitch ass cryn all the time',
-        'True games have some 50 cent in the background.. some fat joe.. some BALLIN',
-        'Chad warden wipes his ASS with 600 dollars'
-    ]
-
     async def on_ready(self):
         print('Logged on as', self.user)
         self.checkstock.start()
@@ -55,8 +39,7 @@ class MyClient(discord.Client):
                 response = meme() if 'chad' not in message.content.lower() else meme(made_up=True)
                 await message.channel.send(response)
             elif 'chad' in message.content.lower():
-                sentence = mchain.make_a_sentence(random.choice(responses.chat_wardens).split(" ")[0],
-                                                        responses.chat_wardens)
+                sentence = mchain.make_a_sentence(random.choice(responses.chat_wardens).split(" ")[0], responses.chat_wardens)
                 await message.channel.send(sentence)
             elif 'og' in message.content:
                 await message.channel.send(responses.chat_warden_vid)

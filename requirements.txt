@@ -2,3 +2,4 @@ discord
 numpy
 pandas
 imgur-uploader
+bs4

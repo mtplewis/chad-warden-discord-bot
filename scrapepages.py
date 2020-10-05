@@ -23,7 +23,9 @@ def scrape_zoolert(include_all: bool = False):
         if 'Sold Out' in text or len(link) < 1:
             sold_out.append(f'Sold Out: {text}')
         else:
-            if 'ebay' not in text:
+            if include_all:
+                in_stock.append(f'In Stock: {text} - {link}')
+            elif 'ebay' not in text:
                 in_stock.append(f'In Stock: {text} - {link}')
     if include_all:
         return {

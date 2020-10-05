@@ -6,6 +6,7 @@ import responses
 import random
 from mememaker import meme
 import os
+import time
 
 # Discord info
 TOKEN = os.environ.get('disc_token')
@@ -14,6 +15,7 @@ TOKEN = os.environ.get('disc_token')
 class MyClient(discord.Client):
 
     client = discord.Client()
+    last_messaged = 0
 
     async def on_ready(self):
         print('Logged on as', self.user)
@@ -27,7 +29,9 @@ class MyClient(discord.Client):
             message = ""
             for result in results:
                 message = f'{message}\n{result}'
-            await channel.send(message)
+            if time.time() >= self.last_messaged + 300:
+                self.last_messaged = time.time()
+                await channel.send(message)
 
     async def on_message(self, message):
         # don't respond to ourselves
@@ -43,6 +47,16 @@ class MyClient(discord.Client):
                 await message.channel.send(sentence)
             elif 'og' in message.content:
                 await message.channel.send(responses.chat_warden_vid)
+            elif 'check current stock' in message.content.lower():
+                out_of_stock = 'Out of Stock: ```'
+                in_stock = 'In Stock: ```'
+                results = scrapepages.scrape_zoolert(include_all=True)
+                for result in results['in_stock']:
+                    in_stock = in_stock + '\n' + result
+                for result in results['sold_out']:
+                    out_of_stock = out_of_stock + '\n' + result
+                full_msg = f'{out_of_stock}```\n{in_stock}```'
+                await message.channel.send(full_msg)
             else:
                 await message.channel.send(random.choice(responses.chat_wardens))
 

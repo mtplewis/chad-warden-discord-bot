@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def scrape_zoolert():
+def scrape_zoolert(include_all: bool = False):
     sold_out = []
     in_stock = []
     url = 'https://www.zoolert.com/videogames/consoles/playstation5/'
@@ -25,7 +25,13 @@ def scrape_zoolert():
         else:
             if 'ebay' not in text and 'target' not in text:
                 in_stock.append(f'In Stock: {text} - {link}')
-    return in_stock
+    if include_all:
+        return {
+            'sold_out': sold_out,
+            'in_stock': in_stock
+        }
+    else:
+        return in_stock
 
 
 pages = {

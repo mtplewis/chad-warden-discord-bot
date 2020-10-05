@@ -20,6 +20,7 @@ class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged on as', self.user)
         self.checkstock.start()
+        self.check_headset.start()
 
     @tasks.loop(minutes=1)
     async def checkstock(self):
@@ -29,9 +30,23 @@ class MyClient(discord.Client):
             message = ""
             for result in results:
                 message = f'{message}\n{result}'
-            if time.time() >= self.last_messaged + 300:
-                self.last_messaged = time.time()
+            if 'target' not in message.lower():
                 await channel.send(message)
+            else:
+                if time.time() >= self.last_messaged + 1800:
+                    self.last_messaged = time.time()
+                    await channel.send(message)
+
+    @tasks.loop(minutes=10)
+    async def check_headset(self):
+        channel = client.get_channel(758447405451837482)
+        results = scrapepages.scrape_sony_for_headset()
+        print(results)
+        if len(results['in_stock']) > 0:
+            message = ""
+            for result in results['in_stock']:
+                message = f'{message}\n{result}'
+            await channel.send(message)
 
     async def on_message(self, message):
         # don't respond to ourselves
@@ -51,12 +66,31 @@ class MyClient(discord.Client):
                 out_of_stock = 'Out of Stock: ```'
                 in_stock = 'In Stock: ```'
                 results = scrapepages.scrape_zoolert(include_all=True)
-                for result in results['in_stock']:
-                    in_stock = in_stock + '\n' + result
+                if len(results['in_stock']) > 0:
+                    for result in results['in_stock']:
+                        in_stock = in_stock + '\n' + result
+                    in_stock = f'{in_stock}```'
+                else:
+                    in_stock = in_stock + '\n' + 'None' + '```'
                 for result in results['sold_out']:
                     out_of_stock = out_of_stock + '\n' + result
-                full_msg = f'{out_of_stock}```\n{in_stock}```'
-                await message.channel.send(full_msg)
+                headset_out_of_stock = 'Out of Stock: ```'
+                headset_in_stock = 'In Stock: ```'
+                results = scrapepages.scrape_sony_for_headset()
+                if len(results['in_stock']) > 0:
+                    for result in results['in_stock']:
+                        headset_in_stock = headset_in_stock + '\n' + result
+                    headset_in_stock = f'{headset_in_stock}```'
+                else:
+                    headset_in_stock = headset_in_stock + '\n' + 'None' + '```'
+                for result in results['sold_out']:
+                    headset_out_of_stock = headset_out_of_stock + '\n' + result
+                await message.channel.send(f'**PS5 Stock:**')
+                await message.channel.send(f'{out_of_stock}```')
+                await message.channel.send(in_stock)
+                await message.channel.send(f'**Pulse 3D wireless headset stock:**')
+                await message.channel.send(f'{headset_out_of_stock}```')
+                await message.channel.send(f'{headset_in_stock}')
             else:
                 await message.channel.send(random.choice(responses.chat_wardens))
 

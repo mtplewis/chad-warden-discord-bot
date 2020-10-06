@@ -33,7 +33,7 @@ class MyClient(discord.Client):
             if 'target' not in message.lower():
                 await channel.send(message)
             else:
-                if time.time() >= self.last_messaged + 1800:
+                if time.time() >= self.last_messaged + 18000:
                     self.last_messaged = time.time()
                     await channel.send(message)
 

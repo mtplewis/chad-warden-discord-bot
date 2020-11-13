@@ -30,12 +30,9 @@ class MyClient(discord.Client):
             message = ""
             for result in results:
                 message = f'{message}\n{result}'
-            if 'target' not in message.lower():
+            if time.time() >= self.last_messaged + 1800:
+                self.last_messaged = time.time()
                 await channel.send(message)
-            else:
-                if time.time() >= self.last_messaged + 1800:
-                    self.last_messaged = time.time()
-                    await channel.send(message)
 
     @tasks.loop(minutes=10)
     async def check_headset(self):

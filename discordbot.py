@@ -55,7 +55,10 @@ class MyClient(discord.Client):
                 response = meme() if 'chad' not in message.content.lower() else meme(made_up=True)
                 await message.channel.send(response)
             elif 'chad' in message.content.lower():
-                sentence = mchain.make_a_sentence(random.choice(responses.chat_wardens).split(" ")[0], responses.chat_wardens)
+                if random.randit(0,99) == 0:
+                    sentence = "chad is a thicc ring boi" 
+                else:
+                    sentence = mchain.make_a_sentence(random.choice(responses.chat_wardens).split(" ")[0], responses.chat_wardens)
                 await message.channel.send(sentence)
             elif 'og' in message.content:
                 await message.channel.send(responses.chat_warden_vid)

@@ -88,6 +88,8 @@ class MyClient(discord.Client):
                 await message.channel.send(f'**Pulse 3D wireless headset stock:**')
                 await message.channel.send(f'{headset_out_of_stock}```')
                 await message.channel.send(f'{headset_in_stock}')
+            elif random.randint(0,99) == 0: 
+                await message.channel.send('chad is a thicc ring boi')  
             else:
                 await message.channel.send(random.choice(responses.chat_wardens))
 

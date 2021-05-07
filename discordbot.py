@@ -34,16 +34,16 @@ class MyClient(discord.Client):
                 self.last_messaged = time.time()
                 await channel.send(message)
 
-    @tasks.loop(minutes=10)
-    async def check_headset(self):
-        channel = client.get_channel(758447405451837482)
-        results = scrapepages.scrape_sony_for_headset()
-        print(results)
-        if len(results['in_stock']) > 0:
-            message = ""
-            for result in results['in_stock']:
-                message = f'{message}\n{result}'
-            await channel.send(message)
+    # @tasks.loop(minutes=10)
+    # async def check_headset(self):
+    #     channel = client.get_channel(758447405451837482)
+    #     results = scrapepages.scrape_sony_for_headset()
+    #     print(results)
+    #     if len(results['in_stock']) > 0:
+    #         message = ""
+    #         for result in results['in_stock']:
+    #             message = f'{message}\n{result}'
+    #         await channel.send(message)
 
     async def on_message(self, message):
         # don't respond to ourselves
